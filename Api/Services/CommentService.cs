@@ -11,11 +11,13 @@ public class CommentService : ICommentService
 {
     private readonly IRepository<Comment> _commentRepository;
     private readonly IMapper _mapper;
+    private readonly ITodoService _todoService;
 
-    public CommentService(IRepository<Comment> commentRepository, IMapper mapper)
+    public CommentService(IRepository<Comment> commentRepository, IMapper mapper, ITodoService todoService)
     {
         _commentRepository = commentRepository;
         _mapper = mapper;
+        _todoService = todoService;
     }
     
     public IEnumerable<CommentDto> GetByTodoId(int todoId)
@@ -27,6 +29,8 @@ public class CommentService : ICommentService
     
     public async Task<int> Create(CreateCommentDto commentDto)
     {
+        await _todoService.Get(commentDto.TodoId);
+        
         Comment newComment = new Comment
         {
             TodoId = commentDto.TodoId,
