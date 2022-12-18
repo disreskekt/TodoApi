@@ -46,12 +46,12 @@ public class TodoController : ControllerBase
         }
     }
     
-    [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         try
         {
-            TodoDto todoDto = await _todoService.Get(id);
+            TodoDto todoDto = await _todoService.GetIncludeComments(id);
 
             return Ok(todoDto);
         }
@@ -65,8 +65,8 @@ public class TodoController : ControllerBase
         }
     }
     
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         try
         {
@@ -91,6 +91,10 @@ public class TodoController : ControllerBase
         {
             await _todoService.UpdateHeader(updateHeaderDto);
             
+            return NoContent();
+        }
+        catch (NothingToUpdateException)
+        {
             return NoContent();
         }
         catch (EntityNotFoundException)

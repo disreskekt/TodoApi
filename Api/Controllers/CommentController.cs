@@ -16,14 +16,18 @@ public class CommentController : ControllerBase
         _commentService = commentService;
     }
     
-    [HttpGet]
-    public IActionResult GetByTodoId([FromQuery] int todoId)
+    [HttpGet("{todoId}")]
+    public async Task<IActionResult> GetByTodoId([FromRoute] int todoId)
     {
         try
         {
-            IEnumerable<CommentDto> commentDtos = _commentService.GetByTodoId(todoId);
+            IEnumerable<CommentDto> commentDtos = await _commentService.GetByTodoId(todoId);
             
             return Ok(commentDtos);
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
         }
         catch (Exception)
         {
@@ -46,8 +50,8 @@ public class CommentController : ControllerBase
         }
     }
     
-    [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         try
         {

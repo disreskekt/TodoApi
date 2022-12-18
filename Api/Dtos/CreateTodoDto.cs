@@ -9,7 +9,9 @@ public class CreateTodoDto
     [MaxLength(100)]
     public string Header { get; set; }
     [Required]
+    [EnumDataType(typeof(Categories))]
     public Categories Category { get; set; }
     [Required]
+    [EnumDataType(typeof(Colors))]
     public Colors Color { get; set; }
 }

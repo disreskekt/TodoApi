@@ -53,6 +53,18 @@ public class TodoService : ITodoService
         
         return _mapper.Map<TodoDto>(todo);
     }
+
+    public async Task<TodoDto> GetIncludeComments(int id)
+    {
+        Todo? todo = await _todoRepository.GetInclude(id, todo => todo.Comments);
+        
+        if (todo is null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        return _mapper.Map<TodoDto>(todo);
+    }
     
     public async Task Delete(int id)
     {
@@ -74,6 +86,11 @@ public class TodoService : ITodoService
         if (todo is null)
         {
             throw new EntityNotFoundException();
+        }
+        
+        if (todo.Header.Equals(updateHeaderDto.NewHeader))
+        {
+            throw new NothingToUpdateException();
         }
         
         todo.Header = updateHeaderDto.NewHeader;

@@ -38,6 +38,11 @@ public class Repository<T> : IRepository<T>
         return await _dbSet.FindAsync(id);
     }
     
+    public async Task<T?> GetInclude<TProp>(int id, Expression<Func<T, TProp>> include)
+    {
+        return await _dbSet.Include(include).FirstOrDefaultAsync(entity => entity.Id == id);
+    }
+    
     public void Insert(T entity)
     {
         _dbSet.Add(entity);

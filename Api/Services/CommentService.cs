@@ -20,11 +20,11 @@ public class CommentService : ICommentService
         _todoService = todoService;
     }
     
-    public IEnumerable<CommentDto> GetByTodoId(int todoId)
+    public async Task<IEnumerable<CommentDto>> GetByTodoId(int todoId)
     {
-        IQueryable<Comment> comments = _commentRepository.GetAll(comment => comment.TodoId == todoId);
+        TodoDto todoDto = await _todoService.GetIncludeComments(todoId);
         
-        return _mapper.Map<IEnumerable<CommentDto>>(comments.AsEnumerable());
+        return todoDto.Comments;
     }
     
     public async Task<int> Create(CreateCommentDto commentDto)
