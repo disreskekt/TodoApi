@@ -27,5 +27,38 @@ public class DataContext : DbContext
         modelBuilder.Entity<Todo>()
             .Property(todo => todo.Color)
             .HasConversion(new EnumToStringConverter<Colors>());
+        
+        modelBuilder.Entity<Todo>()
+            .HasData(new Todo
+                {
+                    Header = "Create a ticket",
+                    Category = Categories.Analytics,
+                    Color = Colors.Red,
+                    CreationDate = DateTime.Now,
+                    IsDone = false,
+                    Comments = new List<Comment>
+                    {
+                        new Comment
+                        {
+                            Text = "First comment"
+                        },
+                        new Comment
+                        {
+                            Text = "Second comment"
+                        },
+                        new Comment
+                        {
+                            Text = "Third comment"
+                        }
+                    }
+                },
+                new Todo
+                {
+                    Header = "Request information",
+                    Category = Categories.Bookkeeping,
+                    Color = Colors.Green,
+                    CreationDate = DateTime.Now,
+                    IsDone = false
+                });
     }
 }
