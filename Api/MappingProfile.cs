@@ -11,5 +11,7 @@ public class MappingProfile : Profile
     {
         CreateMap<Todo, TodoDto>()
             .ForMember(dest => dest.Hash, options => options.MapFrom(src => HashHelper.ComputeMd5Hash(src.Header)));
+        
+        CreateMap<Comment, CommentDto>();
     }
 }

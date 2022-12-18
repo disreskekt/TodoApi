@@ -18,21 +18,19 @@ public class Repository<T> : IRepository<T>
         _dbSet = db.Set<T>();
     }
     
-    public IEnumerable<T> GetAll()
+    public IQueryable<T> GetAll()
     {
         return _dbSet;
     }
     
-    public IEnumerable<T> GetAll<TProp>(Expression<Func<T, TProp>>[] includes)
+    public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate)
     {
-        IEnumerable<T> includableQueryable = _dbSet;
-        
-        foreach (Expression<Func<T,TProp>> include in includes)
-        {
-            includableQueryable = _dbSet.Include(include);
-        }
-        
-        return includableQueryable;
+        return _dbSet.Where(predicate);
+    }
+    
+    public IQueryable<T> GetAll<TProp>(Expression<Func<T, TProp>> include)
+    {
+        return _dbSet.Include(include);
     }
     
     public async Task<T?> Get(int id)
@@ -47,13 +45,12 @@ public class Repository<T> : IRepository<T>
     
     public void Update(T entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Update(entity);
     }
     
     public void Delete(T entity)
     {
-        throw new NotImplementedException();
-        
+        _dbSet.Remove(entity);
     }
 
     public async Task SaveChangesAsync()

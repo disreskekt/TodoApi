@@ -6,8 +6,9 @@ namespace Domain.RepositoryInterfaces;
 public interface IRepository<T>
     where T : BaseEntity
 {
-    public IEnumerable<T> GetAll();
-    public IEnumerable<T> GetAll<TProp>(params Expression<Func<T, TProp>>[] includes);
+    public IQueryable<T> GetAll();
+    public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
+    public IQueryable<T> GetAll<TProp>(Expression<Func<T, TProp>> include);
     public Task<T?> Get(int id);
     public void Insert(T entity);
     public void Update(T entity);

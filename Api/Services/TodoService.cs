@@ -20,9 +20,9 @@ public class TodoService : ITodoService
 
     public IEnumerable<TodoDto> GetAll()
     {
-        IEnumerable<Todo> todos = _todoRepository.GetAll(todo => todo.Comments);
-
-        return _mapper.Map<IEnumerable<TodoDto>>(todos);
+        IQueryable<Todo> todos = _todoRepository.GetAll(todo => todo.Comments);
+        
+        return _mapper.Map<IEnumerable<TodoDto>>(todos.AsEnumerable());
     }
 
     public async Task<int> Create(CreateTodoDto todoDto)
@@ -52,5 +52,33 @@ public class TodoService : ITodoService
         }
         
         return _mapper.Map<TodoDto>(todo);
+    }
+    
+    public async Task Delete(int id)
+    {
+        Todo? todo = await _todoRepository.Get(id);
+        
+        if (todo is null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        _todoRepository.Delete(todo);
+        await _todoRepository.SaveChangesAsync();
+    }
+    
+    public async Task UpdateHeader(UpdateHeaderDto updateHeaderDto)
+    {
+        Todo? todo = await _todoRepository.Get(updateHeaderDto.Id);
+        
+        if (todo is null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        todo.Header = updateHeaderDto.NewHeader;
+        
+        _todoRepository.Update(todo);
+        await _todoRepository.SaveChangesAsync();
     }
 }

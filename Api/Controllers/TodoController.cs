@@ -57,7 +57,58 @@ public class TodoController : ControllerBase
         }
         catch (EntityNotFoundException)
         {
+            return NotFound();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromQuery] int id)
+    {
+        try
+        {
+            await _todoService.Delete(id);
+            
             return NoContent();
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
+    
+    [HttpPatch]
+    public async Task<IActionResult> UpdateHeader([FromBody] UpdateHeaderDto updateHeaderDto)
+    {
+        try
+        {
+            await _todoService.UpdateHeader(updateHeaderDto);
+            
+            return NoContent();
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetComments([FromQuery] int todoId)
+    {
+        try
+        {
+            return Ok();
         }
         catch (Exception)
         {
