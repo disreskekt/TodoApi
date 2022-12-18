@@ -26,6 +26,7 @@ services.AddScoped<IRepository<Todo>, Repository<Todo>>();
 services.AddScoped<IRepository<Comment>, Repository<Comment>>();
 
 services.AddScoped<ITodoService, TodoService>();
+services.AddScoped<ICommentService, CommentService>();
 
 WebApplication app = builder.Build();
 
