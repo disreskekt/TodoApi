@@ -102,17 +102,4 @@ public class TodoController : ControllerBase
             return BadRequest();
         }
     }
-
-    [HttpGet]
-    public async Task<IActionResult> GetComments([FromQuery] int todoId)
-    {
-        try
-        {
-            return Ok();
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
-    }
 }
