@@ -10,10 +10,12 @@ namespace Api.Controllers;
 public class CommentController : ControllerBase
 {
     private readonly ICommentService _commentService;
-    
-    public CommentController(ICommentService commentService)
+    private readonly ILogger<CommentController> _logger;
+
+    public CommentController(ICommentService commentService, ILogger<CommentController> logger)
     {
         _commentService = commentService;
+        _logger = logger;
     }
     
     [HttpGet("{todoId}")]
@@ -21,6 +23,8 @@ public class CommentController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("Called {GetByTodoId}", nameof(GetByTodoId));
+            
             IEnumerable<CommentDto> commentDtos = await _commentService.GetByTodoId(todoId);
             
             return Ok(commentDtos);
@@ -40,6 +44,8 @@ public class CommentController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("Called {Create}", nameof(Create));
+            
             int id = await _commentService.Create(commentDto);
             
             return CreatedAtAction(nameof(Get), new { Id = id}, commentDto);
@@ -55,6 +61,8 @@ public class CommentController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("Called {Get}", nameof(Get));
+            
             CommentDto commentDto = await _commentService.Get(id);
             
             return Ok(commentDto);

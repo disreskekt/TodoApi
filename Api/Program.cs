@@ -5,12 +5,17 @@ using Domain.Models;
 using Domain.RepositoryInterfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;using Serilog;
+using Serilog.Core;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 IServiceCollection services = builder.Services;
 IConfiguration config = builder.Configuration;
+
+builder.Host.UseSerilog((ctx, lc) => lc
+    .ReadFrom.Configuration(ctx.Configuration)
+    .WriteTo.PostgreSQL(config.GetConnectionString("TodoDb"), "Logs", needAutoCreateTable: true));
 
 services.AddControllers();
 
