@@ -1,6 +1,7 @@
 ﻿using Api.Dtos;
 using Api.Services.Interfaces;
 using Domain.Exceptions;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -10,11 +11,13 @@ namespace Api.Controllers;
 public class CommentController : ControllerBase
 {
     private readonly ICommentService _commentService;
+    private readonly IValidationService<Todo> _todoValidationService;
     private readonly ILogger<CommentController> _logger;
 
-    public CommentController(ICommentService commentService, ILogger<CommentController> logger)
+    public CommentController(ICommentService commentService, IValidationService<Todo> todoValidationService, ILogger<CommentController> logger)
     {
         _commentService = commentService;
+        _todoValidationService = todoValidationService;
         _logger = logger;
     }
     
@@ -49,6 +52,9 @@ public class CommentController : ControllerBase
         try
         {
             _logger.LogInformation("Called {CommentController}/{Create}", nameof(CommentController), nameof(Create));
+            
+            _todoValidationService.ThrowIfNotFound(todo => todo.Id, commentDto.TodoId);
+            //_todoValidationService.ThrowIfFound(td => td.Header, commentDto.Text); //just for example
             
             int id = await _commentService.Create(commentDto);
             

@@ -67,6 +67,11 @@ public class Repository<T> : IRepository<T>
         _dbSet.Remove(entity);
     }
 
+    public bool Any(Expression<Func<T, bool>> predicate)
+    {
+        return _dbSet.Any(predicate);
+    }
+    
     public async Task SaveChangesAsync()
     {
         await _db.SaveChangesAsync();

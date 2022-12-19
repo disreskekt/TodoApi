@@ -14,5 +14,6 @@ public interface IRepository<T>
     public void Insert(T entity);
     public void Update(T entity);
     public void Delete(T entity);
+    public bool Any(Expression<Func<T, bool>> predicate);
     public Task SaveChangesAsync();
 }
