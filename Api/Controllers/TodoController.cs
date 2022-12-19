@@ -1,4 +1,5 @@
-﻿using Api.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Dtos;
 using Api.Services.Interfaces;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,11 @@ public class TodoController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll([FromQuery] [MaxLength(100)] string? textToFindInHeader = null, [FromQuery] params int[] ids)
     {
         try
         {
-            IEnumerable<TodoDto> todoDtos = _todoService.GetAll();
+            IEnumerable<TodoDto> todoDtos = _todoService.GetAll(textToFindInHeader, ids);
             
             return Ok(todoDtos);
         }

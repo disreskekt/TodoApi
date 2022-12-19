@@ -3,6 +3,7 @@ using Domain.Models;
 using Domain.RepositoryInterfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Repositories;
 
@@ -18,19 +19,27 @@ public class Repository<T> : IRepository<T>
         _dbSet = db.Set<T>();
     }
     
-    public IQueryable<T> GetAll()
-    {
-        return _dbSet;
-    }
-    
     public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate)
     {
         return _dbSet.Where(predicate);
     }
     
-    public IQueryable<T> GetAll<TProp>(Expression<Func<T, TProp>> include)
+    public IQueryable<T> GetAll<TProp>(Expression<Func<T, TProp>> include, params Expression<Func<T, bool>>[] predicates)
     {
-        return _dbSet.Include(include);
+        IIncludableQueryable<T,TProp> included = _dbSet.Include(include);
+        
+        if (predicates.Length < 1)
+        {
+            return included;
+        }
+
+        IQueryable<T>? predicated = null;
+        foreach (Expression<Func<T,bool>> predicate in predicates)
+        {
+            predicated = included.Where(predicate);
+        }
+        
+        return predicated!;
     }
     
     public async Task<T?> Get(int id)

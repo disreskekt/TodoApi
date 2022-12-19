@@ -18,9 +18,19 @@ public class TodoService : ITodoService
         _mapper = mapper;
     }
 
-    public IEnumerable<TodoDto> GetAll()
+    public IEnumerable<TodoDto> GetAll(string? textToFindInHeader = null, params int[] ids)
     {
         IQueryable<Todo> todos = _todoRepository.GetAll(todo => todo.Comments);
+        
+        if (textToFindInHeader is not null)
+        {
+            todos = todos.Where(todo => todo.Header.Contains(textToFindInHeader));
+        }
+        
+        if (ids.Length > 0)
+        {
+            todos = todos.Where(todo => ids.Contains(todo.Id));
+        }
         
         return _mapper.Map<IEnumerable<TodoDto>>(todos.AsEnumerable());
     }
