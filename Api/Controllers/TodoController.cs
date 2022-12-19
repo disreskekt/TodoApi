@@ -24,17 +24,17 @@ public class TodoController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Called {GetAll}", nameof(GetAll));
+            _logger.LogInformation("Called {TodoController}/{GetAll}", nameof(TodoController), nameof(GetAll));
             
             IEnumerable<TodoDto> todoDtos = _todoService.GetAll(textToFindInHeader, ids);
             
-            _logger.LogInformation("Ok for {GetAll}", nameof(GetAll));
+            _logger.LogInformation("Ok for {TodoController}/{GetAll}", nameof(TodoController), nameof(GetAll));
             
             return Ok(todoDtos);
         }
         catch (Exception)
         {
-            _logger.LogWarning("Badrequest for {GetAll}", nameof(GetAll));
+            _logger.LogWarning("Badrequest for {TodoController}/{GetAll}", nameof(TodoController), nameof(GetAll));
             return BadRequest();
         }
     }
@@ -44,17 +44,17 @@ public class TodoController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Called {Create}", nameof(Create));
+            _logger.LogInformation("Called {TodoController}/{Create}", nameof(TodoController), nameof(Create));
             
             int id = await _todoService.Create(todoDto);
             
-            _logger.LogInformation("Created for {Create}", nameof(Create));
+            _logger.LogInformation("Created for {TodoController}/{Create}", nameof(TodoController), nameof(Create));
             
             return CreatedAtAction(nameof(Get), new { Id = id}, todoDto);
         }
         catch (Exception)
         {
-            _logger.LogWarning("Badrequest for {Create}", nameof(Create));
+            _logger.LogWarning("Badrequest for {TodoController}/{Create}", nameof(TodoController), nameof(Create));
             return BadRequest();
         }
     }
@@ -64,22 +64,22 @@ public class TodoController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Called {Get}", nameof(Get));
+            _logger.LogInformation("Called {TodoController}/{Get}", nameof(TodoController), nameof(Get));
             
             TodoDto todoDto = await _todoService.GetIncludeComments(id);
             
-            _logger.LogInformation("Ok for {Get}", nameof(Get));
+            _logger.LogInformation("Ok for {TodoController}/{Get}", nameof(TodoController), nameof(Get));
             
             return Ok(todoDto);
         }
         catch (EntityNotFoundException)
         {
-            _logger.LogWarning("NotFound for {Get}", nameof(Get));
+            _logger.LogWarning("NotFound for {TodoController}/{Get}", nameof(TodoController), nameof(Get));
             return NotFound();
         }
         catch (Exception)
         {
-            _logger.LogWarning("Badrequest for {Get}", nameof(Get));
+            _logger.LogWarning("Badrequest for {TodoController}/{Get}", nameof(TodoController), nameof(Get));
             return BadRequest();
         }
     }
@@ -89,22 +89,22 @@ public class TodoController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Called {Delete}", nameof(Delete));
+            _logger.LogInformation("Called {TodoController}/{Delete}", nameof(TodoController), nameof(Delete));
             
             await _todoService.Delete(id);
             
-            _logger.LogInformation("NoContent for {Delete}", nameof(Delete));
+            _logger.LogInformation("NoContent for {TodoController}/{Delete}", nameof(TodoController), nameof(Delete));
             
             return NoContent();
         }
         catch (EntityNotFoundException)
         {
-            _logger.LogWarning("NotFound for {Delete}", nameof(Delete));
+            _logger.LogWarning("NotFound for {TodoController}/{Delete}", nameof(TodoController), nameof(Delete));
             return NotFound();
         }
         catch (Exception)
         {
-            _logger.LogWarning("Badrequest for {Delete}", nameof(Delete));
+            _logger.LogWarning("Badrequest for {TodoController}/{Delete}", nameof(TodoController), nameof(Delete));
             return BadRequest();
         }
     }
@@ -114,27 +114,27 @@ public class TodoController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Called {UpdateHeader}", nameof(UpdateHeader));
+            _logger.LogInformation("Called {TodoController}/{UpdateHeader}", nameof(TodoController), nameof(UpdateHeader));
             
             await _todoService.UpdateHeader(updateHeaderDto);
             
-            _logger.LogInformation("NoContent for {UpdateHeader}", nameof(UpdateHeader));
+            _logger.LogInformation("NoContent for {TodoController}/{UpdateHeader}", nameof(TodoController), nameof(UpdateHeader));
             
             return NoContent();
         }
         catch (NothingToUpdateException)
         {
-            _logger.LogInformation("NoContent for {UpdateHeader}", nameof(UpdateHeader));
+            _logger.LogInformation("NoContent for {TodoController}/{UpdateHeader}", nameof(TodoController), nameof(UpdateHeader));
             return NoContent();
         }
         catch (EntityNotFoundException)
         {
-            _logger.LogWarning("NotFound for {UpdateHeader}", nameof(UpdateHeader));
+            _logger.LogWarning("NotFound for {TodoController}/{UpdateHeader}", nameof(TodoController), nameof(UpdateHeader));
             return NotFound();
         }
         catch (Exception)
         {
-            _logger.LogWarning("Badrequest for {UpdateHeader}", nameof(UpdateHeader));
+            _logger.LogWarning("Badrequest for {TodoController}/{UpdateHeader}", nameof(TodoController), nameof(UpdateHeader));
             return BadRequest();
         }
     }
